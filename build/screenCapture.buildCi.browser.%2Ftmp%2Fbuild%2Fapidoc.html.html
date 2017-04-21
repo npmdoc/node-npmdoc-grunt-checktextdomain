@@ -1,0 +1,227 @@
+<html><head></head><body><div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a href="https://github.com/stephenharris/grunt-checktextdomain">grunt-checktextdomain (v1.0.1)</a>
+</h1>
+<h4>Checks gettext function calls for missing or incorrect text domain.</h4>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.grunt-checktextdomain">module grunt-checktextdomain</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.grunt-checktextdomain.grunt-checktextdomain">
+            function <span class="apidocSignatureSpan"></span>grunt-checktextdomain
+            <span class="apidocSignatureSpan">(grunt)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.grunt-checktextdomain" id="apidoc.module.grunt-checktextdomain">module grunt-checktextdomain</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.grunt-checktextdomain.grunt-checktextdomain" id="apidoc.element.grunt-checktextdomain.grunt-checktextdomain">
+        function <span class="apidocSignatureSpan"></span>grunt-checktextdomain
+        <span class="apidocSignatureSpan">(grunt)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">grunt-checktextdomain = function (grunt) {
+	
+  // Project configuration.
+  grunt.initConfig({
+    jshint: {
+      all: [
+        'Gruntfile.js',
+        'tasks/*.js',
+        '&lt;%= nodeunit.tests %&gt;',
+      ],
+      options: {
+        jshintrc: '.jshintrc',
+      },
+    },
+
+    // Before generating any new files, remove any previously-created files.
+    clean: {
+      tests: ['test/tmp'],
+    },
+
+    copy: {
+    	tests: {
+    		files: [
+    		  //includes files within path
+    	      //{expand: true, src: ['test/fixtures/*'], dest: 'test/tmp', filter: 'isFile'},
+    	      // makes all src relative to cwd
+    	      {expand: true, cwd: 'test/fixtures', src: ['**'], dest: 'test/tmp/'},
+    	    ]
+    	  }
+    },
+
+    // Configuration to be run (and then tested).
+    checktextdomain: {
+    	correct_domain: {
+    		options:{
+    			force: true,
+    			text_domain: 'my-domain',
+    			create_report_file: true,
+    			keywords: keywords
+        	},
+        	files: [{
+        		src: ['test/tmp/correct-domain.php'],
+        		expand: true,
+        	}],
+		},
+    	missing_domain: {
+    		options:{
+    			force: true,
+    			text_domain: 'my-domain',
+    			create_report_file: true,
+    			keywords: keywords
+        	},
+        	files: [{
+        		src: ['test/tmp/missing-domain.php'],
+        		expand: true,
+        	}],
+		},
+    	missing_domain_ignore_missing: {
+    		options:{
+    			force: true,
+    			text_domain: 'my-domain',
+    			report_missing: false,
+    			create_report_file: true,
+    			keywords: keywords
+        	},
+        	files: [{
+        		src: ['test/tmp/missing-domain.php'],
+        		expand: true,
+        	}],
+		},
+    	incorrect_domain_autocomplete: {
+    		options:{
+    			force: true,
+    			text_domain: 'my-domain',
+    			correct_domain: true,
+    			create_report_file: true,
+    			keywords: keywords
+        	},
+        	files: [{
+        		src: ['test/tmp/incorrect-domain-autocorrect.php'],
+        		expand: true,
+        	}],
+		},
+    	variable_domain_autocomplete: {
+    		options:{
+    		    force: true,
+    			text_domain: 'my-domain',
+    			correct_domain: true,
+    			create_report_file: true,
+    			keywords: keywords
+        	},
+        	files: [{
+        		src: ['test/tmp/variable-domain-autocorrect.php'],
+        		expand: true,
+        	}],
+		},
+    	plurals: {
+    		options:{
+    		    force: true,
+    			text_domain: 'my-domain',
+    			create_report_file: true,
+    			keywords: keywords
+        	},
+        	files: [{
+        		src: ['test/tmp/plurals.php'],
+        		expand: true,
+        	}],
+		}
+    },
+
+    // Unit tests.
+    nodeunit: {
+      tests: ['test/*_test.js'],
+    },
+
+  });
+
+  // Actually load this plugin's task(s).
+  grunt.loadTasks('tasks');
+
+  // These plugins provide necessary tasks.
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-nodeunit');
+
+  // Whenever the "test" task is run, first clean the "tmp" dir, then copy in the futures, then run this
+  // plugin's task(s), then test the result.
+  grunt.registerTask('test', ['clean', 'copy', 'checktextdomain', 'nodeunit']);
+
+  // By default, lint and run all tests.
+  grunt.registerTask('default', ['jshint', 'test']);
+
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
+</body></html>
